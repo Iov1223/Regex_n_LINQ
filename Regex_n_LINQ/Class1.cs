@@ -21,7 +21,7 @@ namespace Regex_n_LINQ
             {                
                 read = new StreamReader(_path_001[i]);
                 ContentsOfFiles.Add(read.ReadToEnd());
-                //read.Close();
+                read.Close();
             }
             return ContentsOfFiles;
         }
@@ -73,7 +73,6 @@ namespace Regex_n_LINQ
     }
     public class NewFile
     {
-        private List<string> NewContentsOfFiles = new List<string>();
         private StreamWriter write;
         private string _path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         public void CreateOUTPUT(List<string> newFiles)
