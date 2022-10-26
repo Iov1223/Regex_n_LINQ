@@ -16,11 +16,25 @@ namespace Regex_n_LINQ
             File file = new File();
             Replacement replacement = new Replacement(file.GetFiles());
             NewFile newFile = new NewFile();
-            file.ShowFiles(file.GetFiles());
-            file.ShowPattern();
-            replacement.myRegex(file.GetPattern());
-            replacement.ShowNewFiles();
-            newFile.CreateOUTPUT(replacement.myRegex(file.GetPattern()));
+            try
+            {
+                file.ShowFiles(file.GetFiles());
+                file.ShowPattern();
+                try
+                {
+                    replacement.myRegex(file.GetPattern());
+                    replacement.ShowNewFiles();
+                    newFile.CreateOUTPUT(replacement.myRegex(file.GetPattern()));
+                }
+                catch
+                {
+                   
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Файлов содержащих Input.txt или Pattern.txt в имени не найдено.");
+            }
         }
     }
 }
