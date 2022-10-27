@@ -11,29 +11,40 @@ namespace Regex_n_LINQ
     internal class Program
     {
 
+
         static void Main(string[] args)
         {
-            File file = new File();
-            Replacement replacement = new Replacement(file.GetFiles());
+            ContentsOfFile file = new ContentsOfFile();
+            Replacement replacement = new Replacement(file.GetContentsOfInput());
             NewFile newFile = new NewFile();
-            try
+            if (file.CheckExistInput() == false && file.GetPattern() == "")
             {
-                file.ShowFiles(file.GetFiles());
-                file.ShowPattern();
-                try
-                {
-                    replacement.myRegex(file.GetPattern());
-                    replacement.ShowNewFiles();
-                    newFile.CreateOUTPUT(replacement.myRegex(file.GetPattern()));
-                }
-                catch
-                {
-                   
-                }
+                Console.WriteLine("Ни файлa Pattern.txt, ни файлa/oв содержащих в имени Input*.txt не найдено");
             }
-            catch
+            else
             {
-                Console.WriteLine("Файлов содержащих Input.txt или Pattern.txt в имени не найдено.");
+                if (file.CheckExistInput())
+                {
+                    file.ShowContentsOfInput();
+                    file.ShowPattern();
+                    if (file.GetPattern() != "")
+                    {
+                        file.GetPattern();
+                        replacement.TemplateReplacement(file.GetPattern());
+                        replacement.ShowContentsOfOutput();
+                        newFile.CreateOUTPUT(replacement.TemplateReplacement(file.GetPattern()));
+                    }
+                    else
+                    {
+                        Console.WriteLine("Файлa Pattern.txt не найден.");
+                    }
+
+                }
+                else
+                {
+                    Console.WriteLine("Файлa/oв содержащих в имени Input*.txt не найден/о.");
+                }
+
             }
         }
     }

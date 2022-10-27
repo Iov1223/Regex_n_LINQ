@@ -9,80 +9,104 @@ using System.IO;
 
 namespace Regex_n_LINQ
 {
-    public class File
+    /*
+     * Программу поправил. Когда сдавал она работала, но была написано сумбурно,
+     * поэтому и оставил комментарий с прикреплённой работой в журнале.
+     */
+    public class ContentsOfFile
     {
-        private  string[] _path_001 = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Input*.txt");
-        private string _path_002 = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Pattern.txt";
-        public  List<string> ContentsOfFiles = new List<string>();
+        private  string[] _pathToInput = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Input*.txt");
+        private string _pathToPattern = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Pattern.txt";
+        public  List<string> ContentsOfInput = new List<string>();
         private  StreamReader read;
-        public  List<string> GetFiles()
+        private string pattern;
+        public  List<string> GetContentsOfInput()
         {
-            for (int i = 0; i < _path_001.Length; i++)
+            for (int i = 0; i < _pathToInput.Length; i++)
             {                
-                read = new StreamReader(_path_001[i]);
-                ContentsOfFiles.Add(read.ReadToEnd());
+                read = new StreamReader(_pathToInput[i]);
+                ContentsOfInput.Add(read.ReadToEnd());
                 read.Close();
             }
-            return ContentsOfFiles;
+            return ContentsOfInput;
         }
-        public void ShowFiles(List<string> ContentsOfFiles)
+        public bool CheckExistInput()
         {
-            for (int i = 0; i < ContentsOfFiles.Count; i++)
+            if (ContentsOfInput.Count == 0)
             {
-                Console.WriteLine(ContentsOfFiles[i]);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public void ShowContentsOfInput()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\tСодержимое файла/ов Input*.txt:\n");
+            for (int i = 0; i < ContentsOfInput.Count; i++)
+            {
+                Console.WriteLine(ContentsOfInput[i]);
             }
             Console.WriteLine();
         }
         
         public string GetPattern()
         {
-            read = new StreamReader(_path_002);
-            string pattern = read.ReadToEnd();
-            return pattern;
+            try
+            {
+                read = new StreamReader(_pathToPattern);
+                pattern = read.ReadToEnd();
+                return pattern;
+            }
+            catch
+            {
+                return "";
+            }
         }
         public void ShowPattern()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine($"\n===================================\n" +
                 $"Шаблон для поиска - {GetPattern()}.\n===================================\n");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
     public class Replacement
     {
-        private List<string> Files = new List<string>();
-        public Replacement(List<string> ContentsOfFiles)
+        private List<string> ContentsOfOutput = new List<string>();
+        public Replacement(List<string> ContentsOfInput)
         {
-            Files = ContentsOfFiles;
+            ContentsOfOutput = ContentsOfInput;
         }
-        public List<string> myRegex(string pattern)
+        public List<string> TemplateReplacement(string pattern)
         {
-            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
-            for (int i = 0; i < Files.Count; i++)
+            for (int i = 0; i < ContentsOfOutput.Count; i++)
             {
-                Files[i] = Regex.Replace(Files[i], pattern, "специальная(ой) военная(ой) операция(ии)");               
+                ContentsOfOutput[i] = Regex.Replace(ContentsOfOutput[i], pattern, "специальная(ой) военная(ой) операция(ии)");
             }
-            return Files;
+            return ContentsOfOutput;
         }
-        public void ShowNewFiles()
+        public void ShowContentsOfOutput()
         {
-            Console.WriteLine(Files.Count);
-            for (int i = 0; i < Files.Count; i++)
+            Console.WriteLine("\tСодержимое файла/ов Output*.txt:\n");
+            for (int i = 0; i < ContentsOfOutput.Count; i++)
             {
-                Console.WriteLine(Files[i] + "\n");
+                Console.WriteLine(ContentsOfOutput[i] + "\n");
             }
         }
     }
     public class NewFile
     {
         private StreamWriter write;
-        private string _path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        public void CreateOUTPUT(List<string> newFiles)
+        private string pathOutput = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public void CreateOUTPUT(List<string> ContentsOfOutput)
         {
-
-            Console.WriteLine(newFiles.Count);
-            for (int i = 0; i < newFiles.Count / 2; i++)
+            for (int i = 0; i < ContentsOfOutput.Count; i++)
             {
-                write = new StreamWriter(_path + "\\Output" + (i + 1) + ".txt");
-                write.WriteLine(newFiles[i]);
+                write = new StreamWriter(pathOutput + "\\Output00" + (i + 1) + ".txt");
+                write.WriteLine(ContentsOfOutput[i]);
                 write.Close();
             }
 
